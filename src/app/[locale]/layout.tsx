@@ -7,6 +7,18 @@ import { unstable_setRequestLocale } from 'next-intl/server';
 import { DemoBadge } from '@/components/DemoBadge';
 import { AllLocales } from '@/utils/AppConfig';
 
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton
+} from '@clerk/nextjs'
+
+import './globals.css'
+
+
+
 export const metadata: Metadata = {
   icons: [
     {
@@ -36,7 +48,29 @@ export function generateStaticParams() {
   return AllLocales.map((locale) => ({ locale }));
 }
 
-export default function RootLayout(props: {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <ClerkProvider>
+      <html lang="en">
+        <body>
+          <SignedOut>
+            <SignInButton />
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
+  )
+}
+
+/*export default function RootLayout(props: {
   children: React.ReactNode;
   params: { locale: string };
 }) {
@@ -59,4 +93,4 @@ export default function RootLayout(props: {
       </body>
     </html>
   );
-}
+}*/
